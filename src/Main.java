@@ -1,27 +1,44 @@
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        Vertex<String> a = new Vertex<>("A");
-        Vertex<String> b = new Vertex<>("B");
-        Vertex<String> c = new Vertex<>("C");
-        Vertex<String> d = new Vertex<>("D");
 
-        WeightedGraph<String> graph = new WeightedGraph<>();
-        graph.addEdge(a, b, 1);
-        graph.addEdge(a, c, 4);
-        graph.addEdge(b, d, 2);
-        graph.addEdge(c, d, 1);
+        Vertex<String> pointA = new Vertex<>("A");
+        Vertex<String> pointB = new Vertex<>("B");
+        Vertex<String> pointC = new Vertex<>("C");
+        Vertex<String> pointD = new Vertex<>("D");
 
-        System.out.println("BFS path from A to D:");
-        BreadthFirstSearch<String> bfs = new BreadthFirstSearch<>(a);
-        for (Vertex<String> v : bfs.pathTo(d)) {
-            System.out.print(v.getData() + " ");
-        }
 
-        System.out.println("\nDijkstra path from A to D:");
-        DijkstraSearch<String> dijkstra = new DijkstraSearch<>(a);
-        for (Vertex<String> v : dijkstra.pathTo(d)) {
-            System.out.print(v.getData() + " ");
-        }
+        WeightedGraph<String> cityMap = new WeightedGraph<>();
+        cityMap.addEdge(pointA, pointB, 1);
+        cityMap.addEdge(pointA, pointC, 4);
+        cityMap.addEdge(pointB, pointD, 2);
+        cityMap.addEdge(pointC, pointD, 1);
+
+
+        System.out.println("Exploring all paths from A to D (BFS):");
+        printPath(new BreadthFirstSearch<>(pointA).pathTo(pointD));
+
+
+        System.out.println("\nFinding shortest path from A to D (Dijkstra):");
+        printPath(new DijkstraSearch<>(pointA).pathTo(pointD));
+
     }
+
+
+    private static void printPath(List<Vertex<String>> path) {
+        if (path == null) {
+            System.out.println("No path exists!");
+            return;
+        }
+
+        for (int i = 0; i < path.size(); i++) {
+            System.out.print(path.get(i).getData());
+            if (i < path.size() - 1) {
+                System.out.print(" → ");
+            }
+        }
+        System.out.println();
+    }
+
 }
