@@ -1,29 +1,26 @@
 import java.util.*;
 
-public class WeightedGraph<V> {
+public class UnweightedGraph<V> {
     private Set<Vertex<V>> vertices = new HashSet<>();
     private final boolean directed;
 
-    public WeightedGraph(boolean directed) {
+    public UnweightedGraph(boolean directed) {
         this.directed = directed;
     }
 
     public Vertex<V> getVertex(V data) {
-        for (Vertex<V> v : vertices) {
-            if (v.getData().equals(data)) {
-                return v;
-            }
-        }
-        return null;
+        return vertices.stream()
+                .filter(v -> v.getData().equals(data))
+                .findFirst()
+                .orElse(null);
     }
 
-    public void addEdge(V source, V destination, double weight) {
+    public void addEdge(V source, V destination) {
         Vertex<V> src = getOrCreateVertex(source);
         Vertex<V> dest = getOrCreateVertex(destination);
-
-        src.addAdjacentVertex(dest, weight);
+        src.addAdjacentVertex(dest, 1.0);
         if (!directed) {
-            dest.addAdjacentVertex(src, weight);
+            dest.addAdjacentVertex(src, 1.0);
         }
     }
 
@@ -34,9 +31,5 @@ public class WeightedGraph<V> {
             vertices.add(v);
         }
         return v;
-    }
-
-    public Set<Vertex<V>> getVertices() {
-        return Collections.unmodifiableSet(vertices);
     }
 }

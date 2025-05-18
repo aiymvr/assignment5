@@ -1,26 +1,20 @@
 import java.util.*;
-public class BreadthFirstSearch<V> extends Search<V> {
+
+public class DepthFirstSearch<V> extends Search<V> {
     private Map<Vertex<V>, Vertex<V>> edgeTo = new HashMap<>();
     private Set<Vertex<V>> marked = new HashSet<>();
 
-    public BreadthFirstSearch(UnweightedGraph<V> graph, V startKey) {
+    public DepthFirstSearch(UnweightedGraph<V> graph, V startKey) {
         super(graph, startKey);
-        bfs(start);
+        dfs(start);
     }
 
-    private void bfs(Vertex<V> source) {
-        Queue<Vertex<V>> queue = new LinkedList<>();
-        marked.add(source);
-        queue.add(source);
-
-        while (!queue.isEmpty()) {
-            Vertex<V> current = queue.poll();
-            for (Vertex<V> neighbor : current.getAdjacentVertices().keySet()) {
-                if (!marked.contains(neighbor)) {
-                    marked.add(neighbor);
-                    edgeTo.put(neighbor, current);
-                    queue.add(neighbor);
-                }
+    private void dfs(Vertex<V> current) {
+        marked.add(current);
+        for (Vertex<V> neighbor : current.getAdjacentVertices().keySet()) {
+            if (!marked.contains(neighbor)) {
+                edgeTo.put(neighbor, current);
+                dfs(neighbor);
             }
         }
     }
